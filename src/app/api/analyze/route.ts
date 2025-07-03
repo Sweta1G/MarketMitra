@@ -15,10 +15,10 @@ export interface AnalysisRequest {
   portfolio?: string[];
 }
 
-// Initialize OpenAI client
-const openai = new OpenAI({
+// Initialize OpenAI client (optional)
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
+}) : null;
 
 function getMockAnalysis(news: NewsItem[], portfolio: string[] = []): AnalysisResult {
   console.log('🎯 Mock Analysis Starting:', { newsCount: news.length, portfolio });
@@ -157,6 +157,12 @@ function getCompanyName(symbol: string): string {
 }
 
 async function analyzeWithOpenAI(news: NewsItem[], portfolio: string[] = []): Promise<AnalysisResult> {
+  // If OpenAI is not available, use mock analysis
+  if (!openai) {
+    console.log('OpenAI not configured, using mock analysis');
+    return getMockAnalysis(news, portfolio);
+  }
+
   try {
     const newsText = news.map(item => `${item.title}: ${item.summary}`).join('\n');
     const portfolioText = portfolio.length > 0 ? `Portfolio stocks: ${portfolio.join(', ')}` : '';

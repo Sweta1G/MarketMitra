@@ -131,18 +131,6 @@ export default function Home() {
     }
   };
 
-  const getFilteredNews = (): NewsItem[] => {
-    if (!portfolio || portfolio.stocks.length === 0) return [];
-    
-    return news.filter(item => {
-      const text = `${item.title} ${item.summary}`.toLowerCase();
-      return portfolio.stocks.some(stock => 
-        text.includes(stock.toLowerCase()) || 
-        text.includes(getCompanyName(stock).toLowerCase())
-      );
-    });
-  };
-
   const getPortfolioStockAnalysis = () => {
     if (!portfolio || portfolio.stocks.length === 0) return null;
     
@@ -196,7 +184,6 @@ export default function Home() {
 
         let positiveScore = 0;
         let negativeScore = 0;
-        let totalMentions = 0;
 
         relevantNews.forEach(item => {
           const text = `${item.title} ${item.summary}`.toLowerCase();
@@ -206,7 +193,6 @@ export default function Home() {
             indicator.keywords.forEach(keyword => {
               if (text.includes(keyword)) {
                 positiveScore += indicator.weight;
-                totalMentions++;
               }
             });
           });
@@ -216,7 +202,6 @@ export default function Home() {
             indicator.keywords.forEach(keyword => {
               if (text.includes(keyword)) {
                 negativeScore += indicator.weight;
-                totalMentions++;
               }
             });
           });
@@ -276,7 +261,7 @@ export default function Home() {
     return stockAnalysis;
   };
 
-  const getSectorSpecificAnalysis = (stock: string, relevantNews: any[]) => {
+  const getSectorSpecificAnalysis = (stock: string, relevantNews: NewsItem[]) => {
     let confidenceBoost = 0;
     let reasoning = '';
 

@@ -134,7 +134,10 @@ async function fetchNewsAPI(): Promise<NewsItem[]> {
     });
 
     if (response.data && response.data.articles) {
-      const filteredArticles = response.data.articles.filter((article: any) => {
+      const filteredArticles = response.data.articles.filter((article: {
+        title?: string;
+        description?: string;
+      }) => {
         const title = article.title?.toLowerCase() || '';
         const description = article.description?.toLowerCase() || '';
         
@@ -150,7 +153,13 @@ async function fetchNewsAPI(): Promise<NewsItem[]> {
         return hasStockKeyword && !hasExcludeKeyword;
       });
 
-      return filteredArticles.map((article: any) => ({
+      return filteredArticles.map((article: {
+        title: string;
+        url: string;
+        description?: string;
+        publishedAt: string;
+        source: { name: string };
+      }) => ({
         title: article.title,
         url: article.url,
         summary: article.description?.replace(/<[^>]*>/g, '') || 'Click to read the full article.',

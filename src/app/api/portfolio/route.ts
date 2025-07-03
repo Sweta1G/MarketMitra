@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ZerodhaService, GrowwService, DemoBrokerService, Holding, Position } from '@/lib/brokerServices';
+import { ZerodhaService, DemoBrokerService, Holding, Position } from '@/lib/brokerServices';
 
 export interface Portfolio {
   id: string;
@@ -19,10 +19,19 @@ export interface Portfolio {
 }
 
 // Mock broker accounts storage
-let brokerAccounts: any[] = [];
+interface BrokerAccount {
+  id: string;
+  userId: string;
+  brokerId: string;
+  brokerName: string;
+  isActive: boolean;
+  accessToken: string;
+}
+
+const brokerAccounts: BrokerAccount[] = [];
 
 // Portfolio storage - starts empty, no demo data
-let portfolios: Portfolio[] = [];
+const portfolios: Portfolio[] = [];
 
 // Helper function to sync portfolio with broker
 async function syncPortfolioWithBroker(portfolio: Portfolio): Promise<Portfolio> {
@@ -79,7 +88,7 @@ async function syncPortfolioWithBroker(portfolio: Portfolio): Promise<Portfolio>
 }
 
 // Helper function to create portfolio from broker
-async function createPortfolioFromBroker(brokerAccount: any, userId: string): Promise<Portfolio | null> {
+async function createPortfolioFromBroker(brokerAccount: BrokerAccount, userId: string): Promise<Portfolio | null> {
   try {
     let brokerService;
     switch (brokerAccount.brokerId) {
@@ -128,15 +137,6 @@ async function createPortfolioFromBroker(brokerAccount: any, userId: string): Pr
     return null;
   }
 }
-
-// Indian stock symbols for validation
-const VALID_STOCKS = [
-  'TCS', 'INFY', 'HDFCBANK', 'RELIANCE', 'ITC', 'SBIN', 'BAJFINANCE',
-  'ASIANPAINT', 'MARUTI', 'KOTAKBANK', 'WIPRO', 'ONGC', 'NTPC', 'POWERGRID',
-  'ULTRACEMCO', 'AXISBANK', 'ICICIBANK', 'BHARTIARTL', 'HINDUNILVR', 'NESTLEIND',
-  'LT', 'SUNPHARMA', 'DRREDDY', 'CIPLA', 'APOLLOHOSP', 'TATAMOTORS', 'M&M',
-  'JSWSTEEL', 'TATASTEEL', 'COALINDIA', 'ADANIPORTS', 'BPCL', 'IOC', 'GAIL'
-];
 
 export async function GET(request: NextRequest) {
   try {

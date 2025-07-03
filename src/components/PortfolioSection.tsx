@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Portfolio } from '@/app/api/portfolio/route';
-import { Briefcase, Plus, X, Edit2, Save, TrendingUp, TrendingDown, Link, ChevronDown, Settings } from 'lucide-react';
+import { Briefcase, Plus, X, Edit2, Save, TrendingUp, TrendingDown, Link, ChevronDown } from 'lucide-react';
 
 interface PortfolioSectionProps {
   portfolio: Portfolio | null;
@@ -20,6 +20,7 @@ export function PortfolioSection({ portfolio, onPortfolioUpdate }: PortfolioSect
   // Load all portfolios on component mount
   useEffect(() => {
     loadPortfolios();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update local state when portfolio prop changes

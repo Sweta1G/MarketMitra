@@ -2,7 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ZerodhaService, GrowwService, DemoBrokerService } from '@/lib/brokerServices';
 
 // Mock database for storing broker connections
-let brokerAccounts: any[] = [
+interface BrokerAccount {
+  id: string;
+  userId: string;
+  brokerId: string;
+  brokerName: string;
+  accessToken: string;
+  isActive: boolean;
+  lastSynced: string;
+}
+
+const brokerAccounts: BrokerAccount[] = [
   {
     id: '1',
     userId: 'user123',

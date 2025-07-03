@@ -63,7 +63,7 @@ export class ZerodhaService {
     return `https://kite.zerodha.com/connect/login?api_key=${this.apiKey}&v=3&redirect_url=${redirectUrl}&state=${userId}`;
   }
 
-  async generateAccessToken(requestToken: string, apiSecret: string): Promise<any> {
+  async generateAccessToken(requestToken: string, apiSecret: string): Promise<{ access_token: string; refresh_token: string; user_id: string }> {
     try {
       const response = await axios.post(`${this.baseUrl}/session/token`, {
         api_key: this.apiKey,
@@ -87,7 +87,18 @@ export class ZerodhaService {
         }
       });
 
-      return response.data.data.map((holding: any) => ({
+      return response.data.data.map((holding: {
+        tradingsymbol: string;
+        exchange: string;
+        isin: string;
+        quantity: number;
+        average_price: number;
+        last_price: number;
+        pnl: number;
+        pnl_percent?: number;
+        collateral_quantity?: number;
+        collateral_type?: string;
+      }) => ({
         tradingSymbol: holding.tradingsymbol,
         exchange: holding.exchange,
         isin: holding.isin,
@@ -115,7 +126,16 @@ export class ZerodhaService {
       });
 
       const allPositions = [...response.data.data.net, ...response.data.data.day];
-      return allPositions.map((position: any) => ({
+      return allPositions.map((position: {
+        tradingsymbol: string;
+        exchange: string;
+        quantity: number;
+        average_price: number;
+        last_price: number;
+        pnl: number;
+        pnl_percent?: number;
+        instrument_token?: string;
+      }) => ({
         tradingSymbol: position.tradingsymbol,
         exchange: position.exchange,
         quantity: position.quantity,
@@ -132,13 +152,14 @@ export class ZerodhaService {
   }
 
   private generateChecksum(data: string): string {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(data).digest('hex');
   }
 }
 
 // Groww API Integration (using their public endpoints)
-export class GrowwService {
+export class GrowwService implements BrokerService {
   private baseUrl: string;
 
   constructor() {
@@ -150,13 +171,37 @@ export class GrowwService {
     return `${process.env.NEXT_PUBLIC_BASE_URL}/broker/groww/login?user=${userId}`;
   }
 
-  async getPortfolioData(userId: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getHoldings(accessToken: string): Promise<Holding[]> {
+    // Since Groww doesn't have public API, we'll return demo data
+    return [
+      {
+        tradingSymbol: 'TCS',
+        exchange: 'NSE',
+        isin: 'INE467B01029',
+        quantity: 10,
+        averagePrice: 3500,
+        lastPrice: 3650,
+        pnl: 1500,
+        pnlPercent: 4.28
+      }
+    ];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getPositions(accessToken: string): Promise<Position[]> {
+    return [];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getPortfolioData(userId: string): Promise<{ holdings: Holding[] }> {
     // Since Groww doesn't have public API, we'll return demo data
     return {
       holdings: [
         {
           tradingSymbol: 'TCS',
           exchange: 'NSE',
+          isin: 'INE467B01029',
           quantity: 10,
           averagePrice: 3500,
           lastPrice: 3650,
@@ -182,7 +227,7 @@ export class BrokerFactory {
       case 'zerodha':
         return new ZerodhaService();
       case 'groww':
-        return new GrowwService() as any;
+        return new GrowwService();
       default:
         throw new Error(`Unsupported broker: ${brokerId}`);
     }
@@ -195,6 +240,7 @@ export class DemoBrokerService implements BrokerService {
     return `${process.env.NEXT_PUBLIC_BASE_URL}/api/broker/demo/callback?user=${userId}&token=demo_token`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getHoldings(accessToken: string): Promise<Holding[]> {
     // Return realistic demo holdings
     return [
@@ -241,6 +287,7 @@ export class DemoBrokerService implements BrokerService {
     ];
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getPositions(accessToken: string): Promise<Position[]> {
     return [
       {

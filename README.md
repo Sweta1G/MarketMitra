@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Envest Portfolio - Smart News + Portfolio Insights
 
-## Getting Started
+A comprehensive web application that automates stock market news curation for Indian markets and provides AI-powered portfolio insights.
 
-First, run the development server:
+## 🚀 Features
 
+- **📰 News Scraping**: Automatically curates stock market news from Indian sources (MoneyControl, Economic Times)
+- **💼 Portfolio Management**: Create and manage your stock portfolio with popular Indian stocks
+- **🤖 AI Analysis**: OpenAI-powered sentiment analysis and market insights
+- **🎯 Filtered News**: Shows only news relevant to your portfolio holdings
+- **📊 Real-time Updates**: Live news updates with refresh functionality
+- **🎨 Modern UI**: Beautiful, responsive design with Tailwind CSS
+
+## 🛠 Tech Stack
+
+- **Frontend**: Next.js 15, React, TypeScript
+- **Styling**: Tailwind CSS
+- **Backend**: Next.js API Routes
+- **AI**: OpenAI GPT-3.5 Turbo
+- **Scraping**: Cheerio, Axios
+- **Icons**: Lucide React
+
+## 📦 Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd envest-portfolio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.local.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Add your OpenAI API key to `.env.local`:
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
 
-## Learn More
+4. Run the development server:
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎯 How to Use
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Create Portfolio**: Add your stock symbols (e.g., TCS, INFY, RELIANCE)
+2. **View News**: Check general market news and portfolio-specific news
+3. **AI Insights**: Get AI-powered sentiment analysis and impact assessment
+4. **Stay Updated**: Use the refresh button for latest news and analysis
 
-## Deploy on Vercel
+## 📊 Supported Stocks
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application supports major Indian stocks including:
+- TCS, INFY, WIPRO (IT Sector)
+- HDFCBANK, ICICIBANK, SBIN (Banking)
+- RELIANCE, ITC (Conglomerates)
+- MARUTI, TATAMOTORS (Auto)
+- And many more BSE/NSE listed companies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔧 API Endpoints
+
+- `GET /api/news` - Fetch latest market news
+- `GET /api/portfolio` - Get user portfolios
+- `POST /api/portfolio` - Create new portfolio
+- `PUT /api/portfolio` - Update portfolio
+- `POST /api/analyze` - AI analysis of news sentiment
+
+## 🌟 Key Components
+
+- **Header**: Navigation and branding
+- **PortfolioSection**: Portfolio management interface
+- **NewsSection**: News display with filtering
+- **AnalysisSection**: AI-powered insights and sentiment analysis
+
+## 🔮 Future Enhancements
+
+- Real broker API integration (Zerodha Kite, Groww)
+- Push notifications for significant market moves
+- Historical sentiment tracking
+- More Indian news sources
+- Email alerts for portfolio-specific news
+- Price charts and technical indicators
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## ⚠️ Disclaimer
+
+This application is for informational purposes only and should not be considered as financial advice. Please consult with a qualified financial advisor before making investment decisions.
